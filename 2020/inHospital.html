@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>院內系統資訊標準化互通</title>
+</head>
+<body>
+
+<h2>機構內系統資訊標準化互通</h2>
+<p> 包含的子系統: FHIR server、機構個案管理系統、醫療照護者 APP 或網頁系統  </p>  <br>
+	
+<h3>與院內 FHIR server 互通的資訊</h3>
+<p> 機構個案管理系統  </p>  
+<ol>
+  <li>機構所屬病人增刪改查</li>
+  <li>藥物處方及生理量測結果增刪改查</li>
+</ol>   
+<p> 醫療照護者 APP 或網頁系統  </p>  
+<ol>
+  <li>查詢機構所屬病人 (機構所屬病人可能很多，可設定查詢參數)</li>
+  <li>查詢特定病人之藥物處方及生理量測結果(使用 patient id 及生理檢測類別做查詢)</li>
+  <li>上傳及查詢特定病人之用藥紀錄(增刪改查)</li>
+  <li>上傳及查詢特定病人之生理監測結果(增刪改查)，查詢結果需在 client 端洽當呈現(如列表或曲線圖呈現)</li>
+ </ol>   <br>
+
+
+</body>
+</html>
