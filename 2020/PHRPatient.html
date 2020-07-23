@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>PHR 病人資訊標準化互通</title>
+</head>
+<body>
+
+<h2>PHR 病人資訊標準化互通</h2>
+<p> 包含的子系統: Patinet Portal、PHR FHIR server、DICOMWeb server、民眾端系統、醫護系統、數據分析端系統  <br>
+  Patinet Portal、PHR FHIR server、DICOMWeb server 由主辦單位提供。 <br>
+  聯測參與單位扮演民眾端系統、醫護系統、或數據分析系統腳色(client 端系統)。
+</p>  <br>
+	
+<h3>民眾端系統</h3>
+<ol>
+  <li>從 Portal 創建及取得帳號，並取得創建資料授權(2020 聯測先不做授權驗證)</li>
+  <li>在 PHR FHIR server、DICOMWeb server 創建病人資料(可完全匿名， </li>
+  <li>在 PHR FHIR server 上傳生理監測資料(測試項目二)、上傳用藥處方及用藥紀錄(測試項目三)</li>
+  <li>在 DICOMWeb server 上傳 DICOM 影像</li>
+</ol>  
+<h3>醫護系統</h3>
+<ol>
+  <li>民眾授權醫護系統調閱個人健康紀錄(授權驗證 2021 聯測)，民眾提供個人 PHR Patient.id 給醫護系統</li>
+  <li>醫護系統由  Patient.id 調閱生理監測資料(測試項目二) </li>
+  <li>醫護系統由  Patient.id 調閱用藥處方及用藥紀錄(測試項目三) </li>
+  <li>醫護系統由  Patient.id 調閱 imageingStudy(測試項目四) </li>
+  <li>醫護系統由  imageingStudy 向 DICOMWeb server 調閱 醫學影像 </li>
+  <li>醫護系統由在影像檢視系統進行標記，並上傳標記到 DICOMWeb server (DICOM PS object) 或上傳標記到 FHIR server (SVG annotation)</li>
+</ol>    
+<br>
+<h3>數據分析系統</h3>
+<ol>
+  <li>民眾簽署參與數據分析研究同意書，授權醫護系統調閱個人健康紀錄(授權驗證 2021 聯測)，民眾提供個人 PHR Patient.id 給數據分析系統</li>
+  <li>數據分析系統由  Patient.id 調閱生理監測資料(測試項目二) </li>
+  <li>數據分析系統由  Patient.id 調閱用藥處方及用藥紀錄(測試項目三) </li>
+  <li>擴充項目:數據分析系統基於病人生理監測及用藥等資訊產生及上傳分析結果(2020 不定分析結果規範，參與單位可參考 FHIR observation 上傳結果)</li>
+  <li>數據分析(影像 AI)系統由  Patient.id 調閱 imageingStudy(測試項目四) </li>
+  <li>數據分析(影像 AI)系統由  imageingStudy 向 DICOMWeb server 調閱 醫學影像 </li>
+  <li>數據分析(影像 AI)系統由在影像檢視系統進行標記，並上傳標記到 DICOMWeb server (DICOM PS object) 或上傳標記到 FHIR server (SVG annotation)</li>
+</ol>    
+
+  <br>
+  <h4>授權憑證由 portal 核發給參與測試單位，不同情境及腳色，給與不同權限憑證。</h4>
+  <h4>MI-TW 2020 聯測不驗證權限憑證。但若有民眾實際授權提供健康紀錄，相關系統則須基於憑證，達成存取控制</h4>
+  <h4>Patient portal 整合概述</h4>
+  <h4>可洽慈大醫資蕭嘉宏 chhsiao@gms.tcu.edu.tw 進一步了解 Patient portal 資安防護機制</h4>
+</body>
+</html>
