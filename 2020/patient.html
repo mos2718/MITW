@@ -5,33 +5,59 @@
     <title>機構內及 PHR 病人基本資料互通</title>
 </head>
 <body>
+  <h4>聯測情境及病人資料標準化概述</h4>
+  <p> 
+    聯測分:服務機構聯繫使用、醫療檢查流程身分確認、PHR AI 分析系統三個不同情境，<br>
+    不同情境，必須提供之欄位資料並不相同。但若有提供，則使用一致之欄位及編碼放置資料，以利資料互通處理。 如:<br>
+    病人住址、電話在服務機構系統是必須或選用欄位。在檢查流程身分確認及分析系統，則不需提供。
+  </p>  
+ <a href="docs/Patient_Spec.pdf">MI-TW FHIR Patient 建議欄位說明</a>  &nbsp;  &nbsp; &nbsp; <a href="https://huang-che-yu.github.io/MITW2020Patient/PatientMainPage.html">Patient 欄位概述及範例</a> &nbsp; <br> 
+ <br>
 
-<h2>機構內及 PHR 病人基本資料互通</h2>
-<p> 包含的子系統: 醫療機構 FHIR server、PHR FHIR server、民眾端系統、醫護系統、數據分析端系統  <br>
-  醫療機構 FHIR server、PHR FHIR server 由主辦單位提供。 <br>
-  聯測參與單位扮演民眾端系統、醫護系統、或數據分析系統腳色(client 端系統)。
-</p>  
-
-<h3>個人基本資料應用情境</h3>
-<h4>不同情境，提供之內容不同</h4>
 <h4>服務機構聯繫使用</h4>
+<p>服務機構如健康醫療機構、政府、學校、商業服務、社區等機構。 <br>
+  提供: 提供所需之身分識別，如姓名、ID 等資訊，以及聯絡資訊: telecom、address、contact 。 <br>
+  包含的子系統: 機構用 FHIR server、病人資料提供系統、病人資料查詢檢視系統。 <br>
+  機構用 FHIR server 由主辦單位提供。 <br>
+  聯測參與單位扮演病人聯繫資料提供系統、病人聯繫資料查詢檢視系統(client 端系統)。聯測情境:
+</p>
 <ul>
-  <li>如健康醫療機構、政府、學校、商業服務、社區等機構</li>
-  <li>提供: 提供所需之身分識別，如姓名、ID 等資訊，以及聯絡資訊: telecom、address、contact  </li>
-</ul>  
+  <li>病人聯繫資料提供系統新增、修改、刪除病患基本資料</li>
+  <li>病人聯繫資料查詢檢視系統查詢並洽當呈現病患基本資料  </li>
+</ul>   
+ <a href="">細部欄位說明及範例(待補)</a> &nbsp;  &nbsp;
+ <br>
 <h4>醫療檢查流程身分確認</h4>
+<p>如採檢體、影像檢查等流程、及其醫療或健康活動。
+   提供: 提供所需之身分識別，如identifier、name、birthday、gender。
+   包含的子系統: 機構用 FHIR server、病人識別資料提供系統、病人識別資料查詢檢視系統。  <br>
+  機構用 FHIR server 由主辦單位提供。 <br>
+  聯測參與單位扮演病人識別資料提供系統、病人識別資料查詢檢視系統(client 端系統)。聯測情境:
+</p>
 <ul>
-  <li>如採檢體、影像檢查、及其他活動  </li>
-  <li>提供: 提供所需之身分識別，如identifier、name、birthday、gender  </li>
-</ul>  
+  <li>病人識別資料提供系統新增、修改、刪除病患基本資料</li>
+  <li>病人識別資料查詢檢視系統查詢並洽當呈現病患基本資料  </li>
+</ul>   
+ <a href="">細部欄位說明及範例(待補)</a> &nbsp;  &nbsp;
+
+ <br>
 <h4>AI 或分析系統</h4>
+<p>個人健康紀錄系統(PHR) 上之病人基本資料將完全匿名。
+  Patient resource 當中僅包含  FHIR server 創建的 patient.id 以利其他健康醫療 resources 參考。
+  包含的子系統: PHR FHIR server、民眾使用的系統、AI分析系統。 <br>
+  PHR FHIR server 由主辦單位提供。 <br>
+  聯測參與單位扮演民眾使用的系統或AI 分析系統。聯測情境:
+</p>
 <ul>
-  <li>可提供假名化或匿名化的資料  </li>
-  <li>完全不須個資  </li>
+  <li>民眾創建匿名 patient  </li>
+  <li>AI分析系統由  Patient.id 調閱病人健康醫療紀錄並上傳分析結果(測試項目二到四)  </li>
 </ul>  
 <p>
-  <a href="docs/Patient_Spec.pdf">MI-TW FHIR Patient 建議欄位說明</a> &nbsp;  &nbsp; &nbsp; <br> 
 
+  註1. 為了精確量化分析，後續須提供影像、訊號等資料之裝置及取樣方式，來源資料及分析結果須正規劃標準化 <br>
+  註2. 上傳之聲音、影片、相片、醫學影像可能包含可辨識個人訊息，其去識別化須進一步規範及要求
+  
+  
 
 </body>
 </html>
