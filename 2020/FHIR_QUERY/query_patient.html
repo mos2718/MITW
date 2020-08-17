@@ -28,41 +28,27 @@
             var organization = document.getElementById("organization").value.trim();
             var query_string = "?";
             if (name != "")
-                query_string += "_content=" + name;
+                query_string += "&_content=" + name;
             if (fhir_id != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "_id=" + fhir_id;
+                query_string += "&_id=" + fhir_id;
             }
             if (identifier != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "identifier=" + identifier;
+                query_string += "&identifier=" + identifier;
             }
             if (gender != "all") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "gender=" + gender;
+                query_string += "&gender=" + gender;
             }
             if (birthDate != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "birthdate=" + birthDate;
+                query_string += "&birthdate=" + birthDate;
             }
             if (telecom != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "telecom=" + telecom;
+                query_string += "&telecom=" + telecom;
             }
             if (email != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "email=" + email;
+                query_string += "&email=" + email;
             }
             if (organization != "") {
-                if (query_string.length != 1)
-                    query_string += "&";
-                query_string += "organization=" + organization;
+                query_string += "&organization=" + organization;
             }
             if (server == "")
                 server = "https://fhir.dicom.tw/fhir/Patient";

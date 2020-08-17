@@ -13,7 +13,7 @@ function next_page() {
 }
 
 function detail() {
-    alert(this.id);
+    // alert(this.id);
     url = document.getElementById("server").value.trim() + "/" + this.id;
 
     HTTPGetData(url, detail_view);
@@ -24,9 +24,9 @@ function detail_view(response) {
 }
 
 function clean_table(table) {
-    console.log(table.childElementCount);
+    // console.log(table.childElementCount);
     for (let c = table.childElementCount - 1; c >= 1; c--) {
-        console.log(table.children[c].innerHTML);
+        // console.log(table.children[c].innerHTML);
         table.removeChild(table.children[c]);
     }
 }

@@ -30,9 +30,14 @@
             var gt_value = document.getElementById("gt_value").value.trim();
             var lt_value = document.getElementById("lt_value").value.trim();
             var server = document.getElementById("server").value.trim();
+            var organization = document.getElementById("organization").value.trim();
 
-            var query_string = "?code=" + code;
-
+            var query_string = "?";
+            if (code != "all") {
+                if (query_string.length != 1)
+                    query_string += "&";
+                query_string += "code=" + code;
+            }
             if (patient_id != "") {
                 query_string += "&subject=" + patient_id;
             }
@@ -153,6 +158,7 @@
         <span>Upper Limit</span> &nbsp; <input type="text" id="lt_value" />
         <br/>
         <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://fhir.dicom.tw/fhir/Observation" size="40" />
+        <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW" size="20" />
         <input type="button" onclick="query();" value="查詢" />
         <br/>
         <span>Query String</span> &nbsp; <textarea id="query_string" style="width:60%;height:10%;"></textarea>
