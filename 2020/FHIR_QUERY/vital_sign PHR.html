@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHR Observation</title>
+    <!--漾式設計-->
+    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
+    <script src="/JS/http_request.js"></script>
+    <script src="/JS/Cookie.js"></script>
+    <script src="/JS/file_io.js"></script>
+    <script src="/JS/basic_operation.js"></script>
+    <script>
+        var count = 5;
+        var url = "";
+        var backward = "";
+
+        function fetch_data() {
+            readTextFile("/valueset/observation_code.txt", load_list_file);
+        }
+
+        function query() {
+            var code = document.getElementById("code_list").value;
+            var patient_id = document.getElementById("patient_id").value.trim();
+            var observation_id = document.getElementById("observation_id").value.trim();
+            var from_date = document.getElementById("from_date").value.trim();
+            var to_date = document.getElementById("to_date").value.trim();
+            var eq_value = document.getElementById("eq_value").value.trim();
+            var gt_value = document.getElementById("gt_value").value.trim();
+            var lt_value = document.getElementById("lt_value").value.trim();
+            var server = document.getElementById("server").value.trim();
+
+            var query_string = "?code=" + code;
+
+            if (patient_id != "") {
+                query_string += "&subject=" + patient_id;
+            }
+            if (observation_id != "") {
+                query_string += "&_id=" + observation_id;
+            }
+            if (from_date != "") {
+                query_string += "&date=gt" + from_date;
+            }
+            if (to_date != "") {
+                query_string += "&date=lt" + to_date;
+            }
+            if (eq_value != "") {
+                query_string += "&value-quantity=eq" + eq_value;
+            }
+            if (gt_value != "") {
+                query_string += "&value-quantity=gt" + gt_value;
+            }
+            if (lt_value != "") {
+                query_string += "&value-quantity=lt" + lt_value;
+            }
+            if (server == "")
+                server = "https://fhir.dicom.tw/fhir/Observation";
+
+            url = server + query_string + "&_count=" + count + "&_sort=combo-code,subject,date";
+            document.getElementById("query_string").value = url;
+            HTTPGetData(url, master);
+        }
+
+        function master(response) {
+            if (response != "") {
+                let obj = JSON.parse(response);
+                if (obj.link.length > 1) {
+                    for (let i = 0; i < obj.link.length; i++) {
+                        if (obj.link[i].relation == "previous") {
+                            backward = obj.link[i].url;
+                        } else if (obj.link[i].relation == "next") {
+                            url = obj.link[i].url;
+                        }
+                    }
+                }
+                let bound;
+                if (obj.total == 0) {
+                    document.getElementById("error").style.display = "block";
+                    document.getElementById("error_msg").value = response;
+                    document.getElementById("output").style.display = "none";
+                    return "";
+                }
+                document.getElementById("error").style.display = "none";
+                document.getElementById("output").style.display = "block";
+                if (obj.total == undefined)
+                    bound = count;
+                else if (obj.total <= count)
+                    bound = obj.total;
+                else
+                    bound = count;
+                let table = document.getElementById("master_tb");
+                clean_table(table);
+                for (let i = 0; i < bound; i++) {
+                    let row = document.createElement("tr");
+                    let columns = ["date", "time", "code", "patient", "result", "uom", "details"];
+                    for (let c = 0; c < columns.length; c++) {
+                        columns[c] = document.createElement("td");
+                    }
+                    let this_record = obj.entry[i].resource;
+                    let timestamp = this_record.effectiveDateTime.split("T");
+                    columns[0].innerHTML = timestamp[0];
+                    if (timestamp[1] == undefined)
+                        timestamp[1] = "00:00:00";
+                    columns[1].innerHTML = timestamp[1].split("+")[0];
+                    columns[2].innerHTML = this_record.code.coding[0].display;
+                    columns[3].innerHTML = this_record.subject.reference.split("/")[1];
+                    columns[4].innerHTML = this_record.valueQuantity.value;
+                    columns[5].innerHTML = this_record.valueQuantity.unit;
+                    let btn = document.createElement("input");
+                    btn.type = "button";
+                    btn.value = "CLICK";
+                    btn.onclick = detail;
+                    btn.id = "Observation/" + obj.entry[i].resource.id;
+                    columns[6].appendChild(btn);
+                    for (c = 0; c < columns.length; c++) {
+                        row.appendChild(columns[c]);
+                    }
+                    table.appendChild(row);
+                }
+            }
+        }
+
+        function load_list_file(response) {
+            var list = response.split("\n");
+            const tag_id = list[0].trim() + "_list";
+            var dropdown_list = document.getElementById(tag_id);
+            for (i = 1; i < list.length; i++) {
+                var tuple = list[i].split(",");
+                var option = document.createElement("option");
+                option.text = tuple[1];
+                option.value = tuple[0];
+                dropdown_list.add(option);
+            }
+        }
+    </script>
+</head>
+
+<body onload="fetch_data();">
+    <div id="parameter">
+        <label>Parameters</label>
+        <br/>
+        <span>Observation Code</span> &nbsp; <select id="code_list"></select>
+        <br/>
+        <span>Patient ID</span> &nbsp; <input type="text" id="patient_id" />
+        <br/>
+        <span>Observation ID</span> &nbsp; <input type="text" id="observation_id" />
+        <br/>
+        <span>From Date</span> &nbsp; <input type="text" id="from_date" /> &nbsp;<span>To Date</span> &nbsp; <input type="text" id="to_date" />
+        <br/>
+        <span>Exact Value</span> &nbsp; <input type="text" id="eq_value" />
+        <span>Lower Limit</span> &nbsp; <input type="text" id="gt_value" />
+        <span>Upper Limit</span> &nbsp; <input type="text" id="lt_value" />
+        <br/>
+        <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://fhir.dicom.tw/fhir/Observation" size="40" />
+        <input type="button" onclick="query();" value="查詢" />
+        <br/>
+        <span>Query String</span> &nbsp; <textarea id="query_string" style="width:60%;height:10%;"></textarea>
+        <div id="error" style="display: none;">
+            <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
+        </div>
+    </div>
+    <hr/>
+    <div id="output" style="display:none;">
+        <label>Output</label>
+        <input type="button" value="<" onclick="prev_page();" />
+        <input type="button" value=">" onclick="next_page()" />
+        <table id="master_tb">
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Code</th>
+                <th>Patient Id</th>
+                <th>Result</th>
+                <th>UOM</th>
+                <th>Details</th>
+            </tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

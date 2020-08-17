@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observation</title>
+    <!--漾式設計-->
+    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
+    <script src="/JS/http_request.js"></script>
+    <script src="/JS/Cookie.js"></script>
+    <script src="/JS/basic_operation.js"></script>
+    <script>
+        var count = 15;
+        var url = "https://fhir.dicom.tw/fhir/Observation?status=final&subject=561&_sort=date&_count=" + count;
+        var backward = "";
+
+        function fetch_data() {
+            console.log("fetching...");
+            // var server = getCookie("server_site");
+            var server = "https://fhir.dicom.tw/fhir/";
+            // var fhir_id = getCookie("fhir_id");
+            var fhir_id = 561;
+            // var observation_code = getCookie("observation_code");
+            var observation_code = "8867-4";
+            url = server + "Observation?code=" + observation_code + "&subject=" + fhir_id + "&_sort=date&_count=" + count;
+            HTTPGetData(url, master);
+        }
+
+        function master(response) {
+            if (response != "") {
+                // console.log(response); // Check response content
+                let obj = JSON.parse(response);
+                console.log(obj.link);
+                let title_lable = document.getElementById("title");
+                title_lable.innerHTML = obj.entry[0].resource.code.coding[0].display;
+                // var patient_url = "https://fhir.dicom.tw/fhir/Patient?_id=" + getCookie("fhir_id") + "&_element=name";
+                var patient_url = "https://fhir.dicom.tw/fhir/Patient?_id=" + 561;
+
+                HTTPGetData(patient_url, fill_name);
+                if (obj.link.length > 1) {
+                    url = obj.link[1].url;
+                    for (let i = 0; i < obj.link.length; i++) {
+                        if (obj.link[i].relation == "previous") {
+                            backward = obj.link[i].url;
+                            break;
+                        } else if (obj.link[i].relation == "next") {
+                            url = obj.link[i].url;
+                        }
+                    }
+                }
+                let table = document.getElementById("output_tb");
+                clean_table(table);
+                console.log(obj.entry[0].resource);
+                for (let i = 0; i < obj.total && i < count; i++) {
+                    let row = document.createElement("tr");
+                    let columns = ["date", "time", "result", "uom", "btn_cell"];
+                    for (let c = 0; c < columns.length; c++) {
+                        columns[c] = document.createElement("td");
+                    }
+                    let timestamp = obj.entry[i].resource.effectiveDateTime.split("T");
+                    columns[0].innerHTML = timestamp[0];
+                    columns[1].innerHTML = timestamp[1];
+                    columns[2].innerHTML = obj.entry[i].resource.valueQuantity.value;
+                    columns[3].innerHTML = obj.entry[i].resource.valueQuantity.unit;
+                    let btn = document.createElement("input");
+                    btn.type = "button";
+                    btn.value = "CLICK";
+                    btn.onclick = detail;
+                    btn.id = "Observation/" + obj.entry[i].resource.id;
+                    columns[4].appendChild(btn);
+                    /*
+                    let encounter_btn = document.createElement("input");
+                    encounter_btn.type = "button";
+                    encounter_btn.value = "CLICK";
+                    encounter_btn.id = obj.entry[i].resource.encounter.reference;
+                    encounter_btn.onclick = detail;
+                    // columns[8].appendChild(encounter_btn);
+                    */
+                    for (c = 0; c < columns.length; c++) {
+                        row.appendChild(columns[c]);
+                    }
+                    table.appendChild(row);
+                }
+
+            } else {
+                console.log("Status : failed");
+            }
+        }
+
+        function fill_name(response) {
+            if (response != "") {
+                var name = document.getElementById("name");
+                let obj = JSON.parse(response);
+                name.innerHTML = obj.entry[0].resource.name[0].text;
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="fetch_data();">
+    <div id="output">
+        <label id="title">Test Name</label>
+        <br/>
+        <label id="name">PATIENT NAME</label>
+        <table id="output_tb">
+            <tr>
+                <td>Date</td>
+                <td>Time</td>
+                <td>Result</td>
+                <td>UOM</td>
+                <td>Details</td>
+            </tr>
+        </table>
+        <input type="button" value="<" onclick="prev_page();" />
+        <input type="button" value=">" onclick="next_page()" />
+    </div>
+
+</body>
+
+</html>

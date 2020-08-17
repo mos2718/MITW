@@ -1,0 +1,36 @@
+#parameter,
+#output {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+output {
+    border: 1px groove blueviolet;
+    padding: 10px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    min-width: 500px;
+    text-align: center;
+}
+
+table,
+table tr,
+table tr td {
+    border-collapse: collapse;
+    border: 1px groove lightskyblue;
+}
+
+table tr td {
+    padding: 5px;
+}
