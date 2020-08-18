@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observation</title>
+    <!--漾式設計-->
+    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
+    <script src="/JS/http_request.js"></script>
+    <script src="/JS/Cookie.js"></script>
+    <script src="/JS/basic_operation.js"></script>
+    <script>
+        var count = 5;
+        var url = "";
+        var backward = "";
+
+        function fetch_data() {
+            console.log("fetching...");
+            var server = getCookie("server_site");
+            var patient_id = getCookie("patient_id");
+            HTTPGetData(url, master);
+        }
+
+        function master(response) {
+            if (response != "") {
+                // console.log(response); // Check response content
+                let obj = JSON.parse(response);
+
+            } else {
+                console.log("Status : failed");
+            }
+        }
+
+        function fill_name(response) {
+            if (response != "") {
+                var name = document.getElementById("name");
+                let obj = JSON.parse(response);
+                name.innerHTML = obj.entry[0].resource.name[0].text;
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="fetch_data();">
+    <div id="parameter">
+
+    </div>
+    <div id="output">
+        <label id="resource_type">Test Name</label>
+        <br/>
+        <label id="name">PATIENT NAME</label>
+        <input type="button" value="<" onclick="prev_page();" />
+        <input type="button" value=">" onclick="next_page()" />
+        <table id="output_tb">
+            <tr>
+                <td>Date</td>
+                <td>Time</td>
+                <td>Result</td>
+                <td>UOM</td>
+                <td>Details</td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+
+</html>
