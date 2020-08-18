@@ -19,6 +19,8 @@
             console.log("fetching...");
             var server = getCookie("server_site");
             var patient_id = getCookie("patient_id");
+            var str = server + patient_id;
+            alert(str);
             HTTPGetData(url, master);
         }
 

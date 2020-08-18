@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observation</title>
+    <title>Medication Request</title>
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
     <script src="/JS/http_request.js"></script>
@@ -17,14 +17,14 @@
 
         function fetch_data() {
             console.log("fetching...");
-            var server = getCookie("server_site");
-            var patient_id = getCookie("patient_id");
+            url = getCookie("pathway");
+            alert(url);
             HTTPGetData(url, master);
         }
 
         function master(response) {
             if (response != "") {
-                // console.log(response); // Check response content
+                console.log(response); // debugger
                 let obj = JSON.parse(response);
 
             } else {
@@ -55,11 +55,11 @@
         <input type="button" value=">" onclick="next_page()" />
         <table id="output_tb">
             <tr>
-                <td>Date</td>
-                <td>Time</td>
-                <td>Result</td>
-                <td>UOM</td>
-                <td>Details</td>
+                <td>開立時期</td>
+                <td>狀態</td>
+                <td>有效期</td>
+                <td>詳細資料</td>
+                <td>用藥記錄</td>
             </tr>
         </table>
 

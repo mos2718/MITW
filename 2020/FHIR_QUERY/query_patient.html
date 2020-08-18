@@ -67,6 +67,7 @@
                             break;
                         } else if (obj.link[i].relation == "next") {
                             url = obj.link[i].url;
+                            console.log("new page available " + url);
                         }
                     }
                 }
@@ -93,40 +94,29 @@
                     bound = count;
 
                 for (let i = 0; i < bound; i++) {
+                    let this_record = obj.entry[i].resource;
                     let row = document.createElement("tr");
                     let name = document.createElement("td");
                     let fhir_id = document.createElement("td");
                     let dob = document.createElement("td");
                     let gender = document.createElement("td");
+                    // view details
                     let btn_cell = document.createElement("td");
                     let btn = document.createElement("input");
                     btn.type = "button";
                     btn.value = "CLICK";
                     btn.onclick = detail;
-                    btn.id = obj.entry[i].resource.id;
+                    btn.id = this_record.id;
                     console.log(btn.id);
                     btn_cell.appendChild(btn);
-                    /*
-                    let observation_cell = document.createElement("td");
-                    let observations = document.createElement("select");
-                    observations.name = "observation";
-                    let option_heart_rate = document.createElement("option");
-                    let option_body_temperature = document.createElement("option");
-                    option_heart_rate.value = "8867-4";
-                    option_heart_rate.innerHTML = "Heart Rate";
-                    option_body_temperature.value = "8310-5";
-                    option_body_temperature.innerHTML = "Body Temperature";
-                    observations.appendChild(option_heart_rate);
-                    observations.appendChild(option_body_temperature);
-                    let btn_observation = document.createElement("input");
-                    btn_observation.type = "button";
-                    btn_observation.value = "Observation";
-                    btn_observation.onclick = show_observation;
-                    btn_observation.id = i + 1;
-                    observation_cell.appendChild(observations);
-                    observation_cell.appendChild(btn_observation);
-                    row.appendChild(observation_cell);
-                    */
+                    // view medicationAdministration
+                    let medication_cell = document.createElement("td");
+                    let medication_btn = document.createElement("input");
+                    medication_btn.type = "button";
+                    medication_btn.value = "用藥記錄";
+                    medication_btn.onclick = query_resource;
+                    medication_btn.id = "MedicationRequest?subject=" + this_record.id;
+                    medication_cell.appendChild(medication_btn);
                     name.innerHTML = obj.entry[i].resource.name[0].text;
                     fhir_id.innerHTML = obj.entry[i].resource.id;
                     dob.innerHTML = obj.entry[i].resource.birthDate;
@@ -136,22 +126,44 @@
                     row.appendChild(dob);
                     row.appendChild(gender);
                     row.appendChild(btn_cell);
+                    row.appendChild(medication_cell);
                     table.appendChild(row);
                 }
             }
         }
-        /*
-        function show_observation() {
-            console.log("observation");
-            setCookie("server_site", document.getElementById("server").value, 1);
-            let table = document.getElementById("master_tb");
-            var fhir_id = table.children[this.id].children[1].innerHTML;
-            setCookie("fhir_id", fhir_id, 1);
-            var observation = table.children[this.id].children[5].children[0].value;
-            setCookie("observation_code", observation, 1);
-            window.open("vital_sign.html", "self");
+
+        function query_resource() {
+            /*
+                Does not consider organization since we are viewing the result of one specific patient
+            */
+            // obtain server url and breakdown using '/'
+            var url_segments = document.getElementById("server").value.split("/");
+            alert(url_segments.length);
+            if (url_segments.length != 5) {
+                if (url_segments.length < 4) {
+                    alert("invalid url");
+                    return undefined;
+                }
+                if (url_segments.length == 6) {
+                    console.log("help");
+                    console.table(url_segments);
+                    url_segments.pop();
+                    url_segments.pop();
+                }
+            } else {
+                // remove resource segment because default url comes with resource segment
+                url_segments.pop();
+            }
+            // add resource and query segment
+            url_segments.push(this.id);
+            url = url_segments.join("/");
+            // console.log(url); // debugger
+            // store server site and patient's id in cookie
+            setCookie("pathway", url, 1);
+            // page navigation
+            window.open(this.id.split("?")[0] + ".html", "_self", true);
+
         }
-        */
     </script>
 </head>
 
@@ -161,7 +173,7 @@
         <br/>
         <span>姓名</span> &nbsp; <input type="text" id="name" /> &nbsp; <span>姓</&span> &nbsp; <input type="text" id="family" /> <span>名</span> &nbsp; <input type="text" id="given" />
         <br/>
-        <span>FHIR ID</span> &nbsp; <input type="text" id="fhir_id" />
+        <span>FHIR ID</span> &nbsp; <input type="text" id="fhir_id" size="50" />
         <br/>
         <span>身份證(*外籍人士請用居留證或護照號碼)</span> &nbsp; <input type="text" id="identifier" size="30" />
         <br/>
