@@ -110,8 +110,13 @@
                     columns[1].innerHTML = timestamp[1].split("+")[0];
                     columns[2].innerHTML = this_record.code.coding[0].display;
                     columns[3].innerHTML = this_record.subject.reference.split("/")[1];
-                    columns[4].innerHTML = this_record.valueQuantity.value;
-                    columns[5].innerHTML = this_record.valueQuantity.unit;
+                    if (this_record.code.coding[0].code == "85354-9") {
+                        columns[4].innerHTML = this_record.component[1].valueQuantity.value + "/" + this_record.component[0].valueQuantity.value;
+                        columns[5].innerHTML = this_record.component[1].valueQuantity.unit;
+                    } else {
+                        columns[4].innerHTML = this_record.valueQuantity.value;
+                        columns[5].innerHTML = this_record.valueQuantity.unit;
+                    }
                     let btn = document.createElement("input");
                     btn.type = "button";
                     btn.value = "CLICK";
