@@ -1,57 +1,66 @@
-#parameter,
-#output {
-    border: 1px solid black;
-    padding: 10px;
-    margin: 5px;
-}
-
-label {
-    font-weight: bold;
-    font-size: 20px;
-    text-decoration: underline;
-}
-
-.url_input {
-    width: 1000px;
-}
-
-output {
-    border: 1px groove blueviolet;
-    padding: 10px;
-}
-
-table {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1000px;
-    min-width: 700px;
-    text-align: center;
-}
-
-table,
-table tr,
-table tr th,
-table tr td {
-    border-collapse: collapse;
-    border: 1px groove lightskyblue;
-}
-
-table tr td {
-    padding: 5px;
-}
-
-#detail {
-    align-content: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 800px;
-}
-
-#detail_area {
-    width: 800px;
-    max-width: 1000px;
-    height: 400px;
-    max-height: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
+ body {
+     font-size: 20px;
+ }
+ 
+ input[type="text"],
+ textarea {
+     font-size: 20px;
+ }
+ 
+ #parameter,
+ #output {
+     border: 1px solid black;
+     padding: 10px;
+     margin: 5px;
+ }
+ 
+ label {
+     font-weight: bold;
+     font-size: 50px;
+     text-decoration: underline;
+ }
+ 
+ .url_input {
+     width: 1000px;
+ }
+ 
+ output {
+     border: 1px groove blueviolet;
+     padding: 10px;
+ }
+ 
+ table {
+     margin-left: auto;
+     margin-right: auto;
+     max-width: 1000px;
+     min-width: 700px;
+     text-align: center;
+ }
+ 
+ table,
+ table tr,
+ table tr th,
+ table tr td {
+     border-collapse: collapse;
+     border: 1px groove lightskyblue;
+ }
+ 
+ table tr td {
+     padding: 5px;
+ }
+ 
+ #detail {
+     align-content: center;
+     margin-left: auto;
+     margin-right: auto;
+     width: 800px;
+ }
+ 
+ #detail_area {
+     width: 800px;
+     max-width: 1000px;
+     height: 400px;
+     max-height: 600px;
+     margin-left: auto;
+     margin-right: auto;
+ }
