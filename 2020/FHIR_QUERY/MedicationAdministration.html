@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicaltion Administration</title>
+    <!--漾式設計-->
+    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
+    <script src="/JS/http_request.js"></script>
+    <script src="/JS/Cookie.js"></script>
+    <script src="/JS/basic_operation.js"></script>
+    <script>
+        var count = 10;
+        var url = "";
+        var backward = "";
+
+        function fetch_data() {
+            console.log("fetching...");
+            var server = getCookie("server_site") + "&_count=" + count + "&_sort=_id";
+            document.getElementById("url").value = server;
+            var id = getCookie("subject_id");
+            HTTPGetData(server, master);
+        }
+
+        function master(response) {
+            if (response != "") {
+                console.log(response); // debugger
+                let obj = JSON.parse(response);
+                if (obj.link.length > 1) {
+                    for (let i = 0; i < obj.link.length; i++) {
+                        if (obj.link[i].relation == "previous") {
+                            backward = obj.link[i].url;
+                            break;
+                        } else if (obj.link[i].relation == "next") {
+                            url = obj.link[i].url;
+                            // console.log("new page available " + url); // debugger
+                        }
+                    }
+                }
+
+                let table = document.getElementById("master_tb");
+                clean_table(table);
+                let bound;
+                if (obj.total == 0) {
+                    document.getElementById("error").style.display = "block";
+                    document.getElementById("error_msg").value = response;
+                    document.getElementById("output").style.display = "none";
+                    return "";
+                }
+                document.getElementById("error").style.display = "none";
+                document.getElementById("output").style.display = "block";
+
+                for (let i = 0; i < obj.entry.length; i++) {
+                    let this_record = obj.entry[i].resource;
+                    let row = document.createElement("tr");
+                    /* id, status, last_updated, valid_interval, medication_ref, dose_value, dose_unit, route, dosage_text, medication */
+                    let columns = [];
+                    const columns_size = 10;
+                    for (let c = 0; c < columns_size; c++) {
+                        columns.push(document.createElement("td"));
+                    }
+                    columns[0].innerHTML = this_record.id;
+                    columns[1].innerHTML = this_record.status;
+                    columns[2].innerHTML = this_record.meta.lastUpdated;
+                    columns[3].innerHTML = this_record.effectivePeriod.start + "-" + this_record.effectivePeriod.end;
+                    columns[4].innerHTML = this_record.medicationReference.reference;
+                    columns[5].innerHTML = this_record.dosage.dose.value;
+                    columns[6].innerHTML = this_record.dosage.dose.unit;
+                    columns[7].innerHTML = this_record.dosage.route.coding[0].display;
+                    columns[8].innerHTML = this_record.dosage.text;
+                    let btn_medication = document.createElement("input");
+                    btn_medication.type = "button";
+                    btn_medication.value = "了解藥物";
+                    btn_medication.id = "Medication?_id=" + this_record.medicationReference.reference.split("/")[1];
+                    btn_medication.onclick = query_resource;
+                    columns[9].appendChild(btn_medication);
+                    for (let c = 0; c < columns_size; c++) {
+                        row.appendChild(columns[c]);
+                    }
+                    table.appendChild(row);
+                }
+
+            } else {
+                console.log("Status : failed");
+            }
+        }
+
+        function query_resource() {
+            alert("query" + this.id);
+            alert("server " + getCookie("server_site"));
+            /*
+                Does not consider organization since we are viewing the result of one specific patient
+            */
+            // obtain server url and breakdown using '/'
+            console.log(getCookie("server_site"));
+            var url_segments = getCookie("server_site").split("/");
+            alert(url_segments.length);
+            if (url_segments.length != 5) {
+                if (url_segments.length < 4) {
+                    alert("invalid url");
+                    return "";
+                }
+                if (url_segments.length == 6) {
+                    console.log("help");
+                    console.table(url_segments);
+                    url_segments.pop();
+                    url_segments.pop();
+                }
+            } else {
+                // remove resource segment because default url comes with resource segment
+                url_segments.pop();
+            }
+            // add resource and query segment
+            url_segments.push(this.id);
+            url = url_segments.join("/");
+            // console.log(url); // debugger
+            alert(url);
+            // store server site and patient's id in cookie
+            setCookie("server_site", url, 1);
+            setCookie("subject_id", this.id, 1);
+
+            // page navigation
+            window.open(this.id.split("?")[0] + ".html", "_self", true);
+
+        }
+
+        function fill_name(response) {
+            if (response != "") {
+                var name = document.getElementById("name");
+                let obj = JSON.parse(response);
+                name.innerHTML = obj.entry[0].resource.name[0].text;
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="fetch_data();">
+    <div id="parameter">
+        <span>URL</span> &nbsp; <input type="text" id="url" class="url_input" disabled />
+        <br/>
+        <div id="error" style="display: none;">
+            <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
+        </div>
+    </div>
+    <div id="output">
+        <input type="button" value="<" onclick="prev_page();" />
+        <input type="button" value=">" onclick="next_page()" />
+        <table id="master_tb">
+            <tr>
+                <th>ID</th>
+                <th>狀態</th>
+                <th>最近更動</th>
+                <th>有效期</th>
+                <th>藥物編碼</th>
+                <th>劑量</th>
+                <th>單位</th>
+                <th>用法</th>
+                <th>說明</th>
+                <th>了解藥物</th>
+            </tr>
+        </table>
+        <div id="detail" style="display:none;">
+            <hr/>
+            <textarea id="detail_area">
+
+            </textarea>
+            <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
+        </div>
+    </div>
+
+</body>
+
+</html>
