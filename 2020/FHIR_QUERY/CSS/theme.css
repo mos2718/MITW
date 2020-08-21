@@ -11,6 +11,10 @@ label {
     text-decoration: underline;
 }
 
+.url_input {
+    width: 1000px;
+}
+
 output {
     border: 1px groove blueviolet;
     padding: 10px;
@@ -19,13 +23,14 @@ output {
 table {
     margin-left: auto;
     margin-right: auto;
-    max-width: 800px;
-    min-width: 500px;
+    max-width: 1000px;
+    min-width: 700px;
     text-align: center;
 }
 
 table,
 table tr,
+table tr th,
 table tr td {
     border-collapse: collapse;
     border: 1px groove lightskyblue;
@@ -33,4 +38,20 @@ table tr td {
 
 table tr td {
     padding: 5px;
+}
+
+#detail {
+    align-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+}
+
+#detail_area {
+    width: 800px;
+    max-width: 1000px;
+    height: 400px;
+    max-height: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }

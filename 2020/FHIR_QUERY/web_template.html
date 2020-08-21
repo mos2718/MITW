@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Observation</title>
+    <title>Template</title>
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
     <script src="/JS/http_request.js"></script>
@@ -17,18 +17,44 @@
 
         function fetch_data() {
             console.log("fetching...");
-            var server = getCookie("server_site");
-            var patient_id = getCookie("patient_id");
-            var str = server + patient_id;
-            alert(str);
-            HTTPGetData(url, master);
+            var server = getCookie("server_site") + "&_count=" + count + "&_sort=_id";
+            var id = getCookie("subject_id");
+            HTTPGetData(server, master);
         }
 
         function master(response) {
             if (response != "") {
-                // console.log(response); // Check response content
+                console.log(response); // debugger
                 let obj = JSON.parse(response);
+                if (obj.link.length > 1) {
+                    for (let i = 0; i < obj.link.length; i++) {
+                        if (obj.link[i].relation == "previous") {
+                            backward = obj.link[i].url;
+                            break;
+                        } else if (obj.link[i].relation == "next") {
+                            url = obj.link[i].url;
+                            console.log("new page available " + url);
+                        }
+                    }
+                }
 
+                let table = document.getElementById("master_tb");
+                clean_table(table);
+                let bound;
+                if (obj.total == 0) {
+                    document.getElementById("error").style.display = "block";
+                    document.getElementById("error_msg").value = response;
+                    document.getElementById("output").style.display = "none";
+                    return "";
+                }
+                document.getElementById("error").style.display = "none";
+                document.getElementById("output").style.display = "block";
+
+                for (let i = 0; i < obj.entry.length; i++) {
+                    let this_record = obj.entry[i].resource;
+                    let row = document.createElement("tr");
+                    table.appendChild(row);
+                }
             } else {
                 console.log("Status : failed");
             }
@@ -47,24 +73,28 @@
 
 <body onload="fetch_data();">
     <div id="parameter">
-
+        <span>URL</span> &nbsp; <input type="text" id="url" class="url_input" disabled />
+        <br/>
+        <div id="error" style="display: none;">
+            <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
+        </div>
     </div>
     <div id="output">
-        <label id="resource_type">Test Name</label>
-        <br/>
-        <label id="name">PATIENT NAME</label>
         <input type="button" value="<" onclick="prev_page();" />
         <input type="button" value=">" onclick="next_page()" />
-        <table id="output_tb">
+        <table id="master_tb">
             <tr>
                 <td>Date</td>
                 <td>Time</td>
-                <td>Result</td>
-                <td>UOM</td>
-                <td>Details</td>
             </tr>
         </table>
+        <div id="detail" style="display:none;">
+            <hr/>
+            <textarea id="detail_area">
 
+            </textarea>
+            <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
+        </div>
     </div>
 
 </body>

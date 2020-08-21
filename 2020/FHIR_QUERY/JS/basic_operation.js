@@ -9,18 +9,22 @@ function prev_page() {
 }
 
 function next_page() {
-    HTTPGetData(url, master);
+    if (url == "") {
+        alert("End Of Records");
+    } else
+        HTTPGetData(url, master);
 }
 
 function detail() {
     // alert(this.id);
-    url = document.getElementById("server").value.trim() + "/" + this.id;
+    var detail_url = document.getElementById("server").value.trim() + "/" + this.id;
 
-    HTTPGetData(url, detail_view);
+    HTTPGetData(detail_url, detail_view);
 }
 
 function detail_view(response) {
-    alert(response);
+    document.getElementById("detail_area").value = response;
+    document.getElementById("detail").style.display = "block";
 }
 
 function clean_table(table) {
