@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生理監測</title>
+    <!--漾式設計-->
+    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
+    <script src="/JS/http_request.js"></script>
+    <script src="/JS/Cookie.js"></script>
+    <script src="/JS/basic_operation.js"></script>
+    <script>
+        var count = 7;
+        var url = "";
+        var backward = "";
+
+        function fetch_data() {
+            console.log("fetching...");
+            var server = getCookie("server_site") + "&_count=" + count + "&_sort=_id";
+            document.getElementById("url").value = server;
+            var id = getCookie("subject_id");
+            HTTPGetData(server, master);
+        }
+
+        function master(response) {
+            if (response != "") {
+                // console.log(response); // Check response content
+                let obj = JSON.parse(response);
+                url = "";
+                if (obj.link.length > 1) {
+                    for (let i = 0; i < obj.link.length; i++) {
+                        if (obj.link[i].relation == "previous") {
+                            backward = obj.link[i].url;
+                            break;
+                        } else if (obj.link[i].relation == "next") {
+                            url = obj.link[i].url;
+                            console.log("new page available " + url);
+                        }
+                    }
+                }
+
+                let table = document.getElementById("master_tb");
+                clean_table(table);
+                let bound;
+                if (obj.total == 0) {
+                    document.getElementById("error").style.display = "block";
+                    document.getElementById("error_msg").value = response;
+                    document.getElementById("output").style.display = "none";
+                    return "";
+                }
+                document.getElementById("error").style.display = "none";
+                document.getElementById("output").style.display = "block";
+
+                for (let i = 0; i < obj.entry.length; i++) {
+                    let this_record = obj.entry[i].resource;
+                    let row = document.createElement("tr");
+                    /* date, time, code, result, unit, detail */
+                    let columns = [];
+                    const columns_size = 6;
+                    for (let c = 0; c < columns_size; c++) {
+                        columns.push(document.createElement("td"));
+                    }
+                    let btn_detail = document.createElement("input");
+                    btn_detail.type = "button";
+                    btn_detail.id = "&_id=" + this_record.id;
+                    btn_detail.value = "完整資料";
+                    btn_detail.onclick = detail;
+                    let timestamp = this_record.effectiveDateTime.split("T");
+                    columns[0].innerHTML = timestamp[0];
+                    if (timestamp[1] == undefined)
+                        timestamp[1] = "00:00:00";
+                    columns[1].innerHTML = timestamp[1].split("+")[0];
+                    columns[2].innerHTML = this_record.code.coding[0].display;
+                    if (this_record.code.coding[0].code == "85354-9") { // this is a bad way of managing, enhancement required
+                        columns[3].innerHTML = this_record.component[1].valueQuantity.value + "/" + this_record.component[0].valueQuantity.value;
+                        columns[4].innerHTML = this_record.component[1].valueQuantity.unit;
+                    } else {
+                        columns[3].innerHTML = this_record.valueQuantity.value;
+                        columns[4].innerHTML = this_record.valueQuantity.unit;
+                    }
+                    columns[5].appendChild(btn_detail);
+                    for (let c = 0; c < columns_size; c++) {
+                        row.appendChild(columns[c]);
+                    }
+                    table.appendChild(row);
+                }
+            } else {
+                console.log("Status : failed");
+            }
+        }
+
+        // override function from /JS/basic_operation.js
+        function detail() {
+            var detail_url = getCookie("server_site") + this.id;
+            HTTPGetData(detail_url, detail_view);
+        }
+
+        function fill_name(response) {
+            if (response != "") {
+                var name = document.getElementById("name");
+                let obj = JSON.parse(response);
+                name.innerHTML = obj.entry[0].resource.name[0].text;
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="fetch_data();">
+    <div id="parameter">
+        <span>URL</span> &nbsp; <input type="text" id="url" class="url_input" disabled />
+        <br/>
+        <div id="error" style="display: none;">
+            <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
+        </div>
+    </div>
+    <div id="output">
+        <label id="fhir_identifier">identifier</label>
+        <input type="button" value="<" onclick="prev_page();" />
+        <input type="button" value=">" onclick="next_page()" />
+        <table id="master_tb">
+            <tr>
+                <th>日期</th>
+                <th>時間</th>
+                <th>項目</th>
+                <th>結果</th>
+                <th>單位</th>
+                <th></th>
+            </tr>
+        </table>
+        <div id="detail" style="display:none;">
+            <hr/>
+            <textarea id="detail_area">
+
+            </textarea>
+            <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
+        </div>
+    </div>
+
+</body>
+
+</html>
