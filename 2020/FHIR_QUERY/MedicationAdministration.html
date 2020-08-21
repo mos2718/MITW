@@ -87,23 +87,20 @@
         }
 
         function query_resource() {
-            alert("query" + this.id);
-            alert("server " + getCookie("server_site"));
             /*
                 Does not consider organization since we are viewing the result of one specific patient
             */
             // obtain server url and breakdown using '/'
-            console.log(getCookie("server_site"));
+            console.log(getCookie("server_site")); // debugger
             var url_segments = getCookie("server_site").split("/");
-            alert(url_segments.length);
+            // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
-                    alert("invalid url");
+                    console.log("invalid url"); // debugger
                     return "";
                 }
                 if (url_segments.length == 6) {
-                    console.log("help");
-                    console.table(url_segments);
+                    console.table(url_segments); // debugger
                     url_segments.pop();
                     url_segments.pop();
                 }
@@ -115,7 +112,6 @@
             url_segments.push(this.id);
             url = url_segments.join("/");
             // console.log(url); // debugger
-            alert(url);
             // store server site and patient's id in cookie
             setCookie("server_site", url, 1);
             setCookie("subject_id", this.id, 1);
