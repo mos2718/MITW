@@ -28,7 +28,7 @@
             }
             if (server == "")
                 server = "https://startfhir.dicom.org.tw/fhir/Patient";
-            url = server + query_string + "&_count=" + count + "&_sort=_id";
+            url = server + query_string + "&_count=" + count + "&_sort=-_id";
             document.getElementById("query_string").value = url;
             HTTPGetData(url, master);
         }
@@ -117,15 +117,14 @@
             */
             // obtain server url and breakdown using '/'
             var url_segments = document.getElementById("server").value.split("/");
-            alert(url_segments.length);
+            // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
-                    alert("invalid url");
+                    console.log("invalid url"); // debugger
                     return undefined;
                 }
                 if (url_segments.length == 6) {
-                    console.log("help");
-                    console.table(url_segments);
+                    console.table(url_segments); // debugger
                     url_segments.pop();
                     url_segments.pop();
                 }
