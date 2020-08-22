@@ -15,6 +15,24 @@
         var url = "";
         var backward = "";
 
+        function fetch_data() {
+            var urlParams = new URLSearchParams(window.location.search);
+            let fhir_id, server;
+            if (urlParams.get("from") == "query_observation") {
+                if (urlParams.has("_id")) {
+                    fhir_id = urlParams.get("_id");
+                    document.getElementById("fhir_id").value = fhir_id;
+                }
+                if (urlParams.has("server")) {
+                    server = urlParams.get("server");
+                    document.getElementById("server").value = server;
+                }
+                url = server + "?_id=" + fhir_id + "&_count=" + count + "&_sort=-_id";
+                document.getElementById("query_string").value = url;
+                HTTPGetData(url, master);
+            }
+        }
+
         function query() {
             var fhir_id = document.getElementById("fhir_id").value.trim();
             var server = document.getElementById("server").value.trim();
@@ -147,7 +165,7 @@
     </script>
 </head>
 
-<body>
+<body onload="fetch_data();">
     <div id="parameter">
         <label>Parameters</label>
         <br/>

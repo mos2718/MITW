@@ -79,7 +79,6 @@
                         }
                     }
                 }
-                let bound;
                 if (obj.total == 0) {
                     document.getElementById("error").style.display = "block";
                     document.getElementById("error_msg").value = response;
@@ -88,18 +87,15 @@
                 }
                 document.getElementById("error").style.display = "none";
                 document.getElementById("output").style.display = "block";
-                if (obj.total == undefined)
-                    bound = count;
-                else if (obj.total <= count)
-                    bound = obj.total;
-                else
-                    bound = count;
+
                 let table = document.getElementById("master_tb");
                 clean_table(table);
-                for (let i = 0; i < bound; i++) {
+                for (let i = 0; i < obj.entry.length; i++) {
                     let row = document.createElement("tr");
-                    let columns = ["date", "time", "code", "patient", "result", "uom", "details"];
-                    for (let c = 0; c < columns.length; c++) {
+                    /* "date", "time", "code", "patient", "result", "uom", "details", "patient" */
+                    let columns = [];
+                    const columns_length = 8;
+                    for (let c = 0; c < columns_length; c++) {
                         columns[c] = document.createElement("td");
                     }
                     let this_record = obj.entry[i].resource;
@@ -119,16 +115,58 @@
                     }
                     let btn = document.createElement("input");
                     btn.type = "button";
-                    btn.value = "CLICK";
+                    btn.value = "完整資料";
                     btn.onclick = detail;
-                    btn.id = "Observation/" + obj.entry[i].resource.id;
+                    btn.id = obj.entry[i].resource.id;
                     columns[6].appendChild(btn);
+                    let btn_patient = document.createElement("input");
+                    btn_patient.type = "button";
+                    btn_patient.value = "查看病人";
+                    btn_patient.onclick = query_resource;
+                    btn_patient.id = "Patient?_id=" + this_record.subject.reference.split("/")[1];
+                    columns[7].appendChild(btn_patient);
                     for (c = 0; c < columns.length; c++) {
                         row.appendChild(columns[c]);
                     }
                     table.appendChild(row);
                 }
             }
+        }
+
+        function query_resource() {
+            console.log("query ...");
+            /*
+                Does not consider organization since we are viewing the result of one specific patient
+            */
+            // obtain server url and breakdown using '/'
+            var url_segments = document.getElementById("server").value.split("/");
+            // alert(url_segments.length); // debugger
+            if (url_segments.length != 5) {
+                if (url_segments.length < 4) {
+                    console.log("invalid url"); // debugger
+                    return undefined;
+                }
+                if (url_segments.length == 6) {
+                    console.table(url_segments); // debugger
+                    url_segments.pop();
+                    url_segments.pop();
+                }
+            } else {
+                // remove resource segment because default url comes with resource segment
+                url_segments.pop();
+            }
+            // add resource and query segment
+            url_segments.push(this.id);
+            url = url_segments.join("/");
+            alert(url); // debugger
+            console.log("flush");
+            // store server site and patient's id in cookie
+            setCookie("server_site", url, 1);
+            setCookie("subject_id", this.id, 1);
+            // page navigation
+            let path = "query_patient_PHR.html?from=query_observation&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
+            window.open(path, "_self", true);
+
         }
 
         function load_list_file(response) {
@@ -162,8 +200,9 @@
         <span>Lower Limit</span> &nbsp; <input type="text" id="gt_value" />
         <span>Upper Limit</span> &nbsp; <input type="text" id="lt_value" />
         <br/>
-        <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://fhir.dicom.tw/fhir/Observation" size="40" />
-        <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW" size="20" />
+        <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://startfhir.dicom.org.tw/fhir/Observation" size="40" />
+        <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW.ForPHR" size="20" />
+        <br/>
         <input type="button" onclick="query();" value="查詢" />
         <br/>
         <span>Query String</span> &nbsp; <textarea id="query_string" style="width:60%;height:10%;"></textarea>
@@ -178,15 +217,22 @@
         <input type="button" value=">" onclick="next_page()" />
         <table id="master_tb">
             <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Code</th>
-                <th>Patient Id</th>
-                <th>Result</th>
-                <th>UOM</th>
-                <th>Details</th>
+                <th>日期</th>
+                <th>時間</th>
+                <th>項目</th>
+                <th>病人代碼</th>
+                <th>結果</th>
+                <th>單位</th>
+                <th></th>
             </tr>
         </table>
+        <div id="detail" style="display:none;">
+            <hr/>
+            <textarea id="detail_area">
+
+            </textarea>
+            <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
+        </div>
     </div>
 
 </body>
