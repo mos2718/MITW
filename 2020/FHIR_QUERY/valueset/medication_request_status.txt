@@ -1,0 +1,10 @@
+status
+all,ALL
+active,Active
+on-hold,On Hold
+cancelled,Cancelled
+completed,Completed
+entered-in-error,Entered in Error
+stopped,Stopped
+draft,Draft
+unknown,Unknown

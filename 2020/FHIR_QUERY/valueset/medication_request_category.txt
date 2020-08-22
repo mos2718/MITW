@@ -1,0 +1,6 @@
+category
+all,ALL
+inpatient,Inpatient
+outpatient,Outpatient
+community,Community
+discharge,Discharge
