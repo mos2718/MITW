@@ -18,7 +18,7 @@
         function fetch_data() {
             var urlParams = new URLSearchParams(window.location.search);
             let fhir_id, server;
-            if (urlParams.get("from") == "query_observation") {
+            if (urlParams.get("from") == "query") {
                 if (urlParams.has("_id")) {
                     fhir_id = urlParams.get("_id");
                     document.getElementById("fhir_id").value = fhir_id;
@@ -171,7 +171,7 @@
         <br/>
         <span>FHIR ID</span> &nbsp; <input type="text" id="fhir_id" size="50" />
         <br/>
-        <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://startfhir.dicom.org.tw/fhir/Patient" size="40" />
+        <span>伺服器</span> &nbsp; <input type="text" id="server" class="url_input" value="https://startfhir.dicom.org.tw/fhir/Patient" size="40" />
         <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW.ForPHR" size="20" />
         <br/>
         <input type="button" onclick="query();" value="查詢" />
