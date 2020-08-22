@@ -34,3 +34,16 @@ function clean_table(table) {
         table.removeChild(table.children[c]);
     }
 }
+
+function load_list_file(response) {
+    var list = response.split("\n");
+    const tag_id = list[0].trim() + "_list";
+    var dropdown_list = document.getElementById(tag_id);
+    for (i = 1; i < list.length; i++) {
+        var tuple = list[i].split(",");
+        var option = document.createElement("option");
+        option.text = tuple[1];
+        option.value = tuple[0];
+        dropdown_list.add(option);
+    }
+}
