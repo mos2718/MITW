@@ -17,8 +17,9 @@
 
         function query() {
             var name = document.getElementById("name").value.trim();
+            var family = document.getElementById("family").value.trim();
+            var given = document.getElementById("given").value.trim();
             var fhir_id = document.getElementById("fhir_id").value.trim();
-            var identifier = document.getElementById("identifier").value.trim();
             var identifier = document.getElementById("identifier").value.trim();
             var gender = document.getElementById("gender").value;
             var birthDate = document.getElementById("date_of_birth").value.trim();
@@ -29,6 +30,11 @@
             var query_string = "?";
             if (name != "")
                 query_string += "&_content=" + name;
+            if (family != "") {
+                query_string += "&family:contains=" + family;
+            }
+            if (given != "")
+                query_string += "&given:contains=" + given;
             if (fhir_id != "") {
                 query_string += "&_id=" + fhir_id;
             }
@@ -118,10 +124,10 @@
                     medication_btn.onclick = query_resource;
                     medication_btn.id = "MedicationRequest?subject=" + this_record.id;
                     medication_cell.appendChild(medication_btn);
-                    // name.innerHTML = obj.entry[i].resource.name[0].text;
+                    name.innerHTML = obj.entry[i].resource.name[0].text;
                     fhir_id.innerHTML = obj.entry[i].resource.id;
-                    // dob.innerHTML = obj.entry[i].resource.birthDate;
-                    // gender.innerHTML = obj.entry[i].resource.gender;
+                    dob.innerHTML = obj.entry[i].resource.birthDate;
+                    gender.innerHTML = obj.entry[i].resource.gender;
                     row.appendChild(name);
                     row.appendChild(fhir_id);
                     row.appendChild(dob);
@@ -193,7 +199,7 @@
         <span>E-Mail</span> &nbsp; <input type="text" id="email" size="40" />
         <br/>
         <span>伺服器</span> &nbsp; <input type="text" id="server" value="https://startfhir.dicom.org.tw/fhir/Patient" size="40" />
-        <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW" size="20" />
+        <span>組織</span> &nbsp; <input type="text" id="organization" value="MITW.ForContact" size="20" />
         <br/>
         <input type="button" onclick="query();" value="查詢" />
         <br/>
@@ -218,6 +224,13 @@
                 <!--<th>生理監測</th>-->
             </tr>
         </table>
+        <div id="detail" style="display:none;">
+            <hr/>
+            <textarea id="detail_area">
+
+            </textarea>
+            <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
+        </div>
     </div>
 </body>
 
