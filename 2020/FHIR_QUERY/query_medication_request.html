@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Query Medication Request</title>
     <!--漾式設計-->
-    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
-    <script src="/JS/http_request.js"></script>
-    <script src="/JS/Cookie.js"></script>
-    <script src="/JS/basic_operation.js"></script>
-    <script src="JS/file_io.js"></script>
+    <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
+    <script src="./JS/http_request.js"></script>
+    <script src="./JS/Cookie.js"></script>
+    <script src="./JS/basic_operation.js"></script>
+    <script src="./JS/file_io.js"></script>
     <script>
         var count = 5;
         var url = "";
@@ -18,8 +18,8 @@
 
         function fetch_data() {
             console.log("fetching...");
-            readTextFile("/valueset/medication_request_status.txt", load_list_file);
-            readTextFile("/valueset/medication_request_category.txt", load_list_file);
+            readTextFile("./valueset/medication_request_status.txt", load_list_file);
+            readTextFile("./valueset/medication_request_category.txt", load_list_file);
             /* Exception handling required */
             let server = document.getElementById("server").value.trim();
             let url_segemnt = server.split("/");

@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHR Observation</title>
     <!--漾式設計-->
-    <link rel="stylesheet" type="text/css" href="/CSS/theme.css" />
-    <script src="/JS/http_request.js"></script>
-    <script src="/JS/Cookie.js"></script>
-    <script src="/JS/file_io.js"></script>
-    <script src="/JS/basic_operation.js"></script>
+    <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
+    <script src="./JS/http_request.js"></script>
+    <script src="./JS/Cookie.js"></script>
+    <script src="./JS/file_io.js"></script>
+    <script src="./JS/basic_operation.js"></script>
     <script>
         var count = 5;
         var url = "";
         var backward = "";
 
         function fetch_data() {
-            readTextFile("/valueset/observation_code.txt", load_list_file);
+            readTextFile("./valueset/observation_code.txt", load_list_file);
         }
 
         function query() {
