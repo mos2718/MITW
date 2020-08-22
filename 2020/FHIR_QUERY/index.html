@@ -5,10 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    <style>
+        body {
+            font-size: 20px;
+        }
+        
+        #main_container {
+            margin: 20px;
+            border: 1px solid blue;
+            padding: 10px;
+        }
+        
+        img {
+            width: 800px;
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>FHIR Query Portal</h1>
+    <div id="main_container">
+        <h1>FHIR 查詢入口</h1>
+        <p>查詢方法</p>
+        <ul>
+            <li><a href="./query_patient_PHR.html">以病人查詢(query_patient_PHR.html)</a></li>
+            <li><a href="./query_observation.html">以生理監測查詢(query_observation.html)</a></li>
+            <li><a href="./query_medication_request.html">以藥物處方查詢(query_medication_request.html)</a></li>
+        </ul>
+        <p>參考圖</p>
+        <img src="doc/query_portal_flow.jpg" alt="query_portal_flow.jpg" style="border:1px solid black;" />
+    </div>
 </body>
 
 </html>
