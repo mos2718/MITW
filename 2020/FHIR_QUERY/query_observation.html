@@ -106,7 +106,7 @@
                     columns[1].innerHTML = timestamp[1].split("+")[0];
                     columns[2].innerHTML = this_record.code.coding[0].display;
                     columns[3].innerHTML = this_record.subject.reference.split("/")[1];
-                    if (this_record.code.coding[0].code == "85354-9") { // this is a bad way of managing, enhancement required
+                    if (this_record.code.coding[0].code == "35094-2") { // this is a bad way of managing, enhancement required
                         columns[4].innerHTML = this_record.component[1].valueQuantity.value + "/" + this_record.component[0].valueQuantity.value;
                         columns[5].innerHTML = this_record.component[1].valueQuantity.unit;
                     } else {
