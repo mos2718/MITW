@@ -2,7 +2,7 @@ code
 all,ALL
 88365-2,Glucose [Mass/volume] in Blood --pre meal
 87422-2,Glucose [Mass/volume] in Blood --post meal
-85354-9,Blood pressure panel
+35094-2,Blood pressure panel
 3137-7,Body height
 29463-7,Body Weight
 41982-0,Body Fat
