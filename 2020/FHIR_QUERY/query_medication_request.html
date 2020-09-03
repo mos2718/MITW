@@ -168,11 +168,12 @@
             // store server site and patient's id in cookie
             setCookie("server_site", url, 1);
             setCookie("subject_id", this.id, 1);
+
             // page navigation
-            let file_name = this.id.split("?")[0];
-            if (file_name == "Patient")
-                file_name = "query_patient_PHR";
-            let path = file_name + ".html" + "?from=query&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
+            let path = this.id.split("?")[0];
+            if (path == "Patient")
+                path = "query_patient_PHR";
+            path += ".html" + "?from=MedicationRequest&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
             window.open(path, "_self", true);
 
         }
