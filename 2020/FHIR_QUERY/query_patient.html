@@ -63,7 +63,7 @@
         }
 
         function master(response) {
-            console.log("master");
+            // console.log("master");
             if (response != "") {
                 let obj = JSON.parse(response);
                 if (obj.link.length > 1) {
@@ -73,7 +73,7 @@
                             break;
                         } else if (obj.link[i].relation == "next") {
                             url = obj.link[i].url;
-                            console.log("new page available " + url);
+                            // console.log("new page available " + url);
                         }
                     }
                 }
@@ -113,7 +113,7 @@
                     btn.value = "CLICK";
                     btn.onclick = detail;
                     btn.id = this_record.id;
-                    console.log(btn.id);
+                    // console.log(btn.id);
                     btn_cell.appendChild(btn);
                     // view medicationAdministration
                     let medication_cell = document.createElement("td");
@@ -151,8 +151,7 @@
                     return undefined;
                 }
                 if (url_segments.length == 6) {
-                    console.log("help");
-                    console.table(url_segments);
+                    // console.table(url_segments);
                     url_segments.pop();
                     url_segments.pop();
                 }

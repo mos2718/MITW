@@ -78,7 +78,7 @@
                             break;
                         } else if (obj.link[i].relation == "next") {
                             url = obj.link[i].url;
-                            console.log("new page available " + url);
+                            // console.log("new page available " + url);
                         }
                     }
                 }
@@ -154,11 +154,11 @@
             // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
-                    console.log("invalid url"); // debugger
+                    // console.log("invalid url"); // debugger
                     return undefined;
                 }
                 if (url_segments.length == 6) {
-                    console.table(url_segments); // debugger
+                    // console.table(url_segments); // debugger
                     url_segments.pop();
                     url_segments.pop();
                 }
@@ -183,7 +183,7 @@
             if (response != "") {
                 var list = JSON.parse(response);
                 const tag_id = "patient" + "_list";
-                console.log(tag_id);
+                // console.log(tag_id);
                 var dropdown_list = document.getElementById(tag_id);
                 /* defaul selection */
                 var all = document.createElement("option");
@@ -191,7 +191,7 @@
                 all.value = "all";
                 dropdown_list.appendChild(all);
                 if (list.total == 0) {
-                    console.log("done");
+                    // console.log("done");
                     return undefined;
                 }
                 for (i = 0; i < list.entry.length; i++) {

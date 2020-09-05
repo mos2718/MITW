@@ -133,7 +133,7 @@
         }
 
         function query_resource() {
-            console.log("query ...");
+            // console.log("query ...");
             /*
                 Does not consider organization since we are viewing the result of one specific patient
             */
@@ -142,11 +142,11 @@
             // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
-                    console.log("invalid url"); // debugger
+                    // console.log("invalid url"); // debugger
                     return undefined;
                 }
                 if (url_segments.length == 6) {
-                    console.table(url_segments); // debugger
+                    // console.table(url_segments); // debugger
                     url_segments.pop();
                     url_segments.pop();
                 }
@@ -158,7 +158,7 @@
             url_segments.push(this.id);
             url = url_segments.join("/");
             // alert(url); // debugger
-            console.log("flush");
+            // console.log("flush");
 
             // page navigation
             let path = "query_patient_PHR.html?from=Observation&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];

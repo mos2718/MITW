@@ -20,7 +20,7 @@
 
         function master(response) {
             if (response != "") {
-                console.log(response); // debugger
+                // console.log(response); // debugger
                 let obj = JSON.parse(response);
                 if (obj.link.length > 1) {
                     for (let i = 0; i < obj.link.length; i++) {
@@ -29,7 +29,7 @@
                             break;
                         } else if (obj.link[i].relation == "next") {
                             url = obj.link[i].url;
-                            console.log("new page available " + url);
+                            // console.log("new page available " + url);
                         }
                     }
                 }

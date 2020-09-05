@@ -38,7 +38,7 @@
 
         function master(response) {
             if (response != "") {
-                console.log(response); // debugger
+                // console.log(response); // debugger
                 let obj = JSON.parse(response);
                 if (obj.link.length > 1) {
                     for (let i = 0; i < obj.link.length; i++) {
@@ -47,7 +47,7 @@
                             break;
                         } else if (obj.link[i].relation == "next") {
                             url = obj.link[i].url;
-                            console.log("new page available " + url);
+                            // console.log("new page available " + url);
                         }
                     }
                 }
@@ -111,7 +111,7 @@
         }
 
         function query_resource() {
-            console.log("query");
+            // console.log("query");
             /*
                 Does not consider organization since we are viewing the result of one specific patient
             */
@@ -120,11 +120,11 @@
             // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
-                    console.log("invalid url"); // debugger
+                    // console.log("invalid url"); // debugger
                     return "";
                 }
                 if (url_segments.length == 6) {
-                    console.table(url_segments); // debugger
+                    // console.table(url_segments); // debugger
                     url_segments.pop();
                     url_segments.pop();
                 }
