@@ -17,7 +17,7 @@
 
         function fetch_data() {
             var urlParams = new URLSearchParams(window.location.search);
-            let subject_id, server, test_case_url;
+            let subject_id, server;
             if (urlParams.get("from") == "query") {
                 if (urlParams.has("subject")) {
                     subject_id = urlParams.get("subject");
