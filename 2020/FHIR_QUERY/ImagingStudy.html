@@ -8,8 +8,7 @@
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <style>
-        #detail_area,
-        #viewer {
+        #detail_area {
             margin-left: auto;
             margin-right: auto;
             max-width: 1000px;
@@ -95,7 +94,7 @@
                     btn_viewer.id = this_record.endpoint[0].reference.split("/")[1];
                     btn_viewer.id = this_record.id;
                     btn_viewer.value = "開啟BlueLight";
-                    btn_viewer.onclick = call_blue_light;
+                    btn_viewer.onclick = show_image;
                     columns[6].appendChild(btn_viewer);
                     for (let c = 0; c < columns_size; c++) {
                         row.appendChild(columns[c]);
@@ -125,18 +124,11 @@
                 let obj = JSON.parse(response);
                 name.innerHTML = obj.entry[0].resource.name[0].text;
             }
-
         }
 
-        function call_blue_light() {
-            const path = "https://cylab-tw.github.io/bluelight/bluelight/html/start.html?StudyInstanceUID=";
-            let panel = document.getElementById("viewer");
-            let iframe = document.getElementById("iframe_main");
-            let _id = document.getElementById("endpoint_id");
-            panel.style.display = "block";
-            iframe.src = path + this.id;
-            _id.innerHTML = "Endpoint = " + this.id;
-            console.log(iframe.src);
+        function show_image() {
+            let path = "https://cylab-tw.github.io/bluelight/bluelight/html/start.html?StudyInstanceUID=" + this.id;
+            window.open(path, "_blank", "menubar=yes,toolbar=yes,scrollbars=yes,resizable=yes,width=1000,height=900");
         }
     </script>
 </head>
@@ -167,12 +159,6 @@
 
             </textarea>
             <input type="button" value="關閉" onclick="document.getElementById('detail').style.display = 'none';" />
-        </div>
-        <div id="viewer" style="display:none;">
-            <span id="endpoint_id"></span>
-            <iframe id="iframe_main" src="" style="width:100%;height:100%;">
-            </iframe>
-            <input type="button" value="關閉" onclick="document.getElementById('viewer').style.display = 'none';" />
         </div>
     </div>
 
