@@ -172,10 +172,8 @@
             // console.log(url); // debugger
 
             // page navigation
-            alert(url);
-            //alert(this.id);
             let new_page = this.id.split("?")[0] + ".html?from=query&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
-            alert("new page -> " + new_page);
+            // alert("new page -> " + new_page);
             window.open(new_page, "_self", true);
 
         }
