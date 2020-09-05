@@ -7,6 +7,17 @@
     <title>Imaging Study</title>
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
+    <style>
+        #detail_area {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1000px;
+            min-width: 700px;
+            height: 800px;
+            border: 1px groove black;
+            padding: 10px;
+        }
+    </style>
     <script src="./JS/http_request.js"></script>
     <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
@@ -18,7 +29,7 @@
         function fetch_data() {
             console.log("fetching...");
             var server = getCookie("server_site") + "&_count=" + count + "&_sort=_id";
-            document.getElementById("url").value = server;
+            document.getElementById("query_string").value = server;
             var id = getCookie("subject_id");
             HTTPGetData(server, master);
         }
@@ -54,9 +65,9 @@
                 for (let i = 0; i < obj.entry.length; i++) {
                     let this_record = obj.entry[i].resource;
                     let row = document.createElement("tr");
-                    /* id, description, status, started, detail */
+                    /* id, description, status, started, detail, endpoint, viewer */
                     let columns = [];
-                    const columns_size = 5;
+                    const columns_size = 7;
                     for (let c = 0; c < columns_size; c++) {
                         columns.push(document.createElement("td"));
                     }
@@ -66,10 +77,25 @@
                     columns[3].innerHTML = this_record.started;
                     let btn_detail = document.createElement("input");
                     btn_detail.type = "button";
-                    btn_detail.id = "&_id=" + this_record.id;
+                    btn_detail.id = "ImagingStudy?_id=" + this_record.id;
                     btn_detail.value = "完整資料";
                     btn_detail.onclick = detail;
                     columns[4].appendChild(btn_detail);
+
+                    let btn_endpoint = document.createElement("input");
+                    btn_endpoint.type = "button";
+                    btn_endpoint.id = "Endpoint?_id=" + this_record.endpoint[0].reference;
+                    btn_endpoint.value = "顯示FHIR JSON";
+                    btn_endpoint.onclick = detail;
+                    columns[5].appendChild(btn_endpoint);
+
+                    let btn_viewer = document.createElement("input");
+                    btn_viewer.type = "button";
+                    btn_viewer.id = this_record.endpoint[0].reference.split("/")[1];
+                    btn_viewer.id = this_record.id;
+                    btn_viewer.value = "開啟BlueLight";
+                    btn_viewer.onclick = show_image;
+                    columns[6].appendChild(btn_viewer);
                     for (let c = 0; c < columns_size; c++) {
                         row.appendChild(columns[c]);
                     }
@@ -82,7 +108,13 @@
 
         // override function from /JS/basic_operation.js
         function detail() {
-            var detail_url = getCookie("server_site") + this.id;
+            // var detail_url = getCookie("server_site") + this.id;
+            var detail_url = document.getElementById("query_string").value.split("?")[0];
+            let url_segments = detail_url.split("/");
+            url_segments.pop();
+            url_segments.push(this.id);
+            detail_url = url_segments.join("/");
+            console.table(detail_url);
             HTTPGetData(detail_url, detail_view);
         }
 
@@ -92,14 +124,18 @@
                 let obj = JSON.parse(response);
                 name.innerHTML = obj.entry[0].resource.name[0].text;
             }
+        }
 
+        function show_image() {
+            let path = "https://cylab-tw.github.io/bluelight/bluelight/html/start.html?StudyInstanceUID=" + this.id;
+            window.open(path, "_blank", "menubar=yes,toolbar=yes,scrollbars=yes,resizable=yes,width=1000,height=900");
         }
     </script>
 </head>
 
 <body onload="fetch_data();">
     <div id="parameter">
-        <span>URL</span> &nbsp; <input type="text" id="url" class="url_input" disabled />
+        <span>URL</span> &nbsp; <input type="text" id="query_string" class="url_input" disabled />
         <br/>
         <div id="error" style="display: none;">
             <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
@@ -114,11 +150,11 @@
                 <th>說明</th>
                 <th>狀態</th>
                 <th>started</th>
-                <th></th>
+                <th colspan="3"></th>
             </tr>
         </table>
+        <hr/>
         <div id="detail" style="display:none;">
-            <hr/>
             <textarea id="detail_area">
 
             </textarea>
