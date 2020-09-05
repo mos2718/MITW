@@ -31,10 +31,14 @@
             } else {
                 server = document.getElementById("server").value.trim();
                 let organization = document.getElementById("organization").value.trim();
+                let fhir_id = document.getElementById("fhir_id").value.trim();
                 url = server + "?organization=" + organization;
                 // at this point we don't have patient fullfill all these criteria, lian noted
                 test_case_url = url + "&_has:Observation:subject:date=gt1990-01-01&_has:ImagingStudy:patient:started=gt1990-01-01&_has:MedicationRequest:subject:authoredon=gt1990-01-01";
-                // test_case_url = url + "&_has:ImagingStudy:patient:started=gt1990-01-01";
+                // this code must happen after previous line
+                if (fhir_id != "")
+                    url += "&_id=" + fhir_id;
+                // test case can be ignore, since it's reloaded each time
                 HTTPGetData(test_case_url, load_list_http);
             }
             url += "&_count=" + count + "&_sort=_id";
