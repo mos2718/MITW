@@ -8,7 +8,6 @@
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <script src="./JS/http_request.js"></script>
-    <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
     <script src="./JS/file_io.js"></script>
     <script>
@@ -165,9 +164,6 @@
             url = url_segments.join("/");
             alert(url); // debugger
             console.log("flush");
-            // store server site and patient's id in cookie
-            setCookie("server_site", url, 1);
-            setCookie("subject_id", this.id, 1);
 
             // page navigation
             let path = this.id.split("?")[0];

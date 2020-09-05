@@ -8,7 +8,6 @@
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <script src="./JS/http_request.js"></script>
-    <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
     <script>
         var count = 5;
@@ -165,8 +164,7 @@
             url_segments.push(this.id);
             url = url_segments.join("/");
             // console.log(url); // debugger
-            // store server site and patient's id in cookie
-            setCookie("pathway", url, 1);
+
             // page navigation
             window.open(this.id.split("?")[0] + ".html", "_self", true);
 

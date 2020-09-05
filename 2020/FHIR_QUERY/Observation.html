@@ -8,7 +8,6 @@
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <script src="./JS/http_request.js"></script>
-    <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
     <script>
         var count = 7;
@@ -77,7 +76,7 @@
                     }
                     let btn_detail = document.createElement("input");
                     btn_detail.type = "button";
-                    btn_detail.id = "&_id=" + this_record.id;
+                    btn_detail.id = "Observation?_id=" + this_record.id;
                     btn_detail.value = "完整資料";
                     btn_detail.onclick = detail;
                     let timestamp = this_record.effectiveDateTime.split("T");
@@ -106,7 +105,11 @@
 
         // override function from /JS/basic_operation.js
         function detail() {
-            var detail_url = getCookie("server_site") + this.id;
+            var detail_url = document.getElementById("query_string").value.split("?")[0];
+            let url_segments = detail_url.split("/");
+            url_segments.pop();
+            url_segments.push(this.id);
+            detail_url = url_segments.join("/");
             HTTPGetData(detail_url, detail_view);
         }
 

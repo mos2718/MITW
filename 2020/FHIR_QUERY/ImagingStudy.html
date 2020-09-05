@@ -19,7 +19,6 @@
         }
     </style>
     <script src="./JS/http_request.js"></script>
-    <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
     <script>
         var count = 5;
@@ -122,13 +121,11 @@
 
         // override function from /JS/basic_operation.js
         function detail() {
-            // var detail_url = getCookie("server_site") + this.id;
             var detail_url = document.getElementById("query_string").value.split("?")[0];
             let url_segments = detail_url.split("/");
             url_segments.pop();
             url_segments.push(this.id);
             detail_url = url_segments.join("/");
-            console.table(detail_url);
             HTTPGetData(detail_url, detail_view);
         }
 

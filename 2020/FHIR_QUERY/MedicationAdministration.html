@@ -8,7 +8,6 @@
     <!--漾式設計-->
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <script src="./JS/http_request.js"></script>
-    <script src="./JS/Cookie.js"></script>
     <script src="./JS/basic_operation.js"></script>
     <script>
         var count = 10;
@@ -105,8 +104,7 @@
                 Does not consider organization since we are viewing the result of one specific patient
             */
             // obtain server url and breakdown using '/'
-            console.log(getCookie("server_site")); // debugger
-            var url_segments = getCookie("server_site").split("/");
+            var url_segments = document.getElementById("query_string").value.split("/");
             // alert(url_segments.length); // debugger
             if (url_segments.length != 5) {
                 if (url_segments.length < 4) {
@@ -126,9 +124,6 @@
             url_segments.push(this.id);
             url = url_segments.join("/");
             // console.log(url); // debugger
-            // store server site and patient's id in cookie
-            setCookie("server_site", url, 1);
-            setCookie("subject_id", this.id, 1);
 
             // page navigation
             let new_page = this.id.split("?")[0] + ".html?from=MedicationAdministration&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
