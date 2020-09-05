@@ -164,7 +164,7 @@
             setCookie("server_site", url, 1);
             setCookie("subject_id", this.id, 1);
             // page navigation
-            let path = "query_patient_PHR.html?from=query&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
+            let path = "query_patient_PHR.html?from=Observation&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
             window.open(path, "_self", true);
 
         }

@@ -18,7 +18,8 @@
         function fetch_data() {
             var urlParams = new URLSearchParams(window.location.search);
             let fhir_id, server, test_case_url;
-            if (urlParams.get("from") == "query") {
+            let valid_src = ["Observation", "MedicationRequest"];
+            if (valid_src.includes(urlParams.get("from"))) {
                 if (urlParams.has("_id")) {
                     fhir_id = urlParams.get("_id");
                     document.getElementById("fhir_id").value = fhir_id;
@@ -32,13 +33,14 @@
                 server = document.getElementById("server").value.trim();
                 let organization = document.getElementById("organization").value.trim();
                 url = server + "?organization=" + organization;
-                test_case_url = url + "&_has:Observation:subject:date=gt1990-01-01&_has:ImagingStudy:patient:started=gt1990-01-01"; //&_has:MedicationRequest:subject:authoredon=gt1990-01-01";
+                // at this point we don't have patient fullfill all these criteria, lian noted
+                test_case_url = url + "&_has:Observation:subject:date=gt1990-01-01&_has:ImagingStudy:patient:started=gt1990-01-01&_has:MedicationRequest:subject:authoredon=gt1990-01-01";
+                // test_case_url = url + "&_has:ImagingStudy:patient:started=gt1990-01-01";
                 HTTPGetData(test_case_url, load_list_http);
             }
             url += "&_count=" + count + "&_sort=_id";
             document.getElementById("query_string").value = url;
             HTTPGetData(url, master);
-
         }
 
         function query() {
@@ -170,7 +172,11 @@
             setCookie("subject_id", this.id, 1);
 
             // page navigation
-            window.open(this.id.split("?")[0] + ".html", "_self", true);
+            alert(url);
+            //alert(this.id);
+            let new_page = this.id.split("?")[0] + ".html?from=query&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
+            alert("new page -> " + new_page);
+            window.open(new_page, "_self", true);
 
         }
 

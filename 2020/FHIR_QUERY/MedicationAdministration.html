@@ -16,11 +16,25 @@
         var backward = "";
 
         function fetch_data() {
-            console.log("fetching...");
-            var server = getCookie("server_site") + "&_count=" + count + "&_sort=_id";
-            document.getElementById("url").value = server;
-            var id = getCookie("subject_id");
-            HTTPGetData(server, master);
+            var urlParams = new URLSearchParams(window.location.search);
+            let request_id, server;
+            if (urlParams.get("from") == "MedicationRequest") {
+                if (urlParams.has("request")) {
+                    request_id = urlParams.get("request");
+                    // document.getElementById("fhir_id").value = fhir_id;
+                }
+                if (urlParams.has("server")) {
+                    server = urlParams.get("server");
+                    // document.getElementById("server").value = server;
+                }
+                url = server + "?request=" + request_id;
+                url += "&_count=" + count + "&_sort=_id";
+                document.getElementById("query_string").value = url;
+                HTTPGetData(url, master);
+            } else {
+                // redirect client back to index since this is not a valid entry point
+                window.open("index.html", "_self", true);
+            }
         }
 
         function master(response) {
@@ -117,7 +131,9 @@
             setCookie("subject_id", this.id, 1);
 
             // page navigation
-            window.open(this.id.split("?")[0] + ".html", "_self", true);
+            let new_page = this.id.split("?")[0] + ".html?from=MedicationAdministration&" + this.id.split("?")[1] + "&server=" + url.split("?")[0];
+            alert("new_page : " + new_page);
+            window.open(new_page, "_self", true);
 
         }
 
@@ -134,7 +150,7 @@
 
 <body onload="fetch_data();">
     <div id="parameter">
-        <span>URL</span> &nbsp; <input type="text" id="url" class="url_input" disabled />
+        <span>URL</span> &nbsp; <input type="text" id="query_string" class="url_input" disabled />
         <br/>
         <div id="error" style="display: none;">
             <span>Error Message</span> &nbsp; <textarea id="error_msg" style="width:60%;height:200px;">mmm</textarea>
