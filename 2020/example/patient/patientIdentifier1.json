@@ -1,0 +1,24 @@
+{
+  "resourceType": "Patient",
+    "identifier": [
+    {
+      "system": "https://www.dicom.org.tw/cs/identityCardNumber_tw",
+      "value": "S134209696"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "text": "馬志偉",
+      "family": "馬",
+      "given": [
+        "志偉"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "2011-11-27",
+  "managingOrganization": {
+    "reference": "Organization/MITW.ForIdentifier"
+  }
+}
