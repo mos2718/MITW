@@ -218,8 +218,17 @@
 
         function onchange_special()
         {
-            document.getElementById('fhir_id').value = document.getElementById('patient_list').value;
-            query();
+            let selected_case = document.getElementById('patient_list').value;
+            if (selected_case != 'all')
+            {
+                document.getElementById('fhir_id').value = document.getElementById('patient_list').value;
+                query();
+            }
+            else
+            {
+                document.getElementById('fhir_id').value = '';
+                query();
+            }
         }
     </script>
 </head>
