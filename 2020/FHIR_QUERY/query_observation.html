@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="./CSS/theme.css" />
     <style>
         .url_input{
-            width: 800px;
+            width: 500px;
         }
     </style>
     <script src="./JS/http_request.js"></script>
@@ -21,19 +21,16 @@
 
       function fetch_data() {
         readTextFile("./valueset/observation_code.txt", load_list_file);
+        // code below will load selected patient into dropdown list 'patient_list'
         server = document.getElementById("server").value.trim().replace('Observation', 'Patient');
         let organization = document.getElementById("organization").value.trim();
-        let patient_id = document.getElementById("patient_id").value.trim();
         url = server + "?organization=" + organization;
-        // at this point we don't have patient fullfill all these criteria, lian noted
         test_case_url =
           url +
           "&_has:Observation:subject:date=gt1990-01-01&_has:ImagingStudy:patient:started=gt1990-01-01&_has:MedicationRequest:subject:authoredon=gt1990-01-01";
         // this code must happen after previous line
-        if (patient_id != "") url += "&_id=" + patient_id;
-        // test case can be ignore, since it's reloaded each time
-        console.log(test_case_url);
         HTTPGetData(test_case_url, load_list_http);
+        //
         query();
       }
 
@@ -52,11 +49,9 @@
         var organization = document.getElementById("organization").value.trim();
 
         var query_string = "?" + '_has_subject:organization=' + organization;
-        console.log(code);
         if (code != '' && code != 'all') {
           if (query_string.length != 1) query_string += "&";
             query_string += "code=" + code;
-            console.log('type');
         }
         if (patient_id != "") {
           query_string += "&subject=" + patient_id;
@@ -232,7 +227,7 @@
         }
       }
 
-      function onchange_special() {
+      function onchange_patient() {
         let selected_case = document.getElementById("patient_list").value;
         if (selected_case != "all") {
           document.getElementById("patient_id").value = document.getElementById(
@@ -246,7 +241,7 @@
         }
       }
 
-      function onchange_event(){
+      function onchange_observation_code(){
           query();
       }
     </script>
@@ -257,12 +252,12 @@
       <label>Parameters</label>
       <br />
       <span>Observation Code</span> &nbsp;
-      <select id="code_list" onchange="onchange_event();"></select>
+      <select id="code_list" onchange="onchange_observation_code();"></select>
       <br />
       <span>Patient ID</span> &nbsp;
       <input type="text" id="patient_id" /> &nbsp; <big>或</big>&nbsp;
       <span>特選病例</span> &nbsp;
-      <select id="patient_list" onchange="onchange_special();"></select>
+      <select id="patient_list" onchange="onchange_patient();"></select>
       <br />
       <span>Observation ID</span> &nbsp;
       <input type="text" id="observation_id" />
