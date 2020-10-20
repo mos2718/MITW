@@ -65,3 +65,7 @@
      margin-left: auto;
      margin-right: auto;
  }
+
+ #patient_id{
+     width:25%;
+ }
