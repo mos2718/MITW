@@ -1,0 +1,145 @@
+{
+  "resourceType": "Patient",
+   "identifier": [
+    {
+      "system": "https://www.dicom.org.tw/cs/identityCardNumber_tw",
+      "value": "P293423636"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "text": "徐佳穎",
+      "family": "徐",
+      "given": [
+        "佳穎"
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "email",
+      "value": "pzhu@hotmail.com"
+    },
+    {
+      "system": "phone",
+      "value": "0948117175",
+      "use": "mobile"
+    },
+    {
+      "system": "url",
+      "value": "https://line.me/ti/p/CNXGBv7lka"
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1975-03-30",
+  "address": [
+    {
+      "text": "000 臺灣省高雄市岡山區平和巷1號",
+      "line": [
+        "平和巷1號"
+      ],
+      "city": "岡山區",
+      "district": "高雄市",
+      "postalCode": "000",
+      "country": "臺灣省"
+    }
+  ],
+  "contact": [
+    {
+      "relationship": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/ValueSet/patient-contactrelationship",
+              "code": "S"
+            }
+          ],
+          "text": "State Agency"
+        }
+      ],
+      "name": {
+        "text": "朱宇軒",
+        "family": "朱",
+        "given": [
+          "宇軒"
+        ]
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "yongyang@hotmail.com"
+        },
+        {
+          "system": "phone",
+          "value": "092809125",
+          "use": "mobile"
+        },
+        {
+          "system": "url",
+          "value": "https://line.me/ti/p/1eCoM2IcgP"
+        }
+      ],
+      "address": {
+        "text": "806 臺灣省高雄市前鎮區永和街626號",
+        "line": [
+          "永和街626號"
+        ],
+        "city": "前鎮區",
+        "district": "高雄市",
+        "postalCode": "806",
+        "country": "臺灣省"
+      },
+      "gender": "unknown"
+    },
+    {
+      "relationship": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/ValueSet/patient-contactrelationship",
+              "code": "I"
+            }
+          ],
+          "text": "Insurance Company"
+        }
+      ],
+      "name": {
+        "text": "黃沖",
+        "family": "黃",
+        "given": [
+          "沖"
+        ]
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "leihuang@hotmail.com"
+        },
+        {
+          "system": "phone",
+          "value": "0979097192",
+          "use": "mobile"
+        },
+        {
+          "system": "url",
+          "value": "https://line.me/ti/p/mQOw6Z0PBe"
+        }
+      ],
+      "address": {
+        "text": "000 臺灣省臺中市大甲區頂福州街564號",
+        "line": [
+          "頂福州街564號"
+        ],
+        "city": "大甲區",
+        "district": "臺中市",
+        "postalCode": "000",
+        "country": "臺灣省"
+      },
+      "gender": "other"
+    }
+  ],
+  "managingOrganization": {
+    "reference": "Organization/MITW.ForContact"
+  }
+}
